@@ -471,6 +471,9 @@ function render(){
   rows.sort((a,b)=>{
     const primary = rankVal(b,state.sort) - rankVal(a,state.sort);
     if(primary!==0) return primary;
+    // tie-break: usage rate (nulls sort last), then vacated targets
+    const au = a.usage===null?-1:a.usage, bu = b.usage===null?-1:b.usage;
+    if(bu!==au) return bu-au;
     return b.vac - a.vac;
   });
 
