@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vacancy Board — 2026 Flex Opportunity Rankings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0D10;
+    --surface:#14171C;
+    --surface-2:#1B1F26;
+    --line:#262B33;
+    --text:#E8EAED;
+    --muted:#8B93A1;
+    --faint:#5B6270;
+    --green:#2FDD8B;
+    --green-dim:rgba(47,221,139,0.14);
+    --yellow:#F2C94C;
+    --yellow-dim:rgba(242,201,76,0.14);
+    --red:#FF5A5F;
+    --red-dim:rgba(255,90,95,0.14);
+    --purple:#B285F5;
+    --purple-dim:rgba(178,133,245,0.16);
+    --amber:#FFB020;
+    --amber-dim:rgba(255,176,32,0.14);
+    --wr:#5AA6FF;
+    --rb:#2FDD8B;
+    --te:#C792EA;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Mono', monospace;
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{font-family:'Space Grotesk', sans-serif;}
+
+  .wrap{max-width:1320px;margin:0 auto;padding:48px 24px 80px;}
+
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding-bottom:32px;
+    margin-bottom:28px;
+  }
+  .eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--green);margin-bottom:14px;font-weight:500;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 3px var(--green-dim);}
+  h1.display{
+    font-size:clamp(34px,5vw,54px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin:0 0 14px;
+    line-height:1.02;
+  }
+  h1.display span{color:var(--green);}
+  .sub{
+    color:var(--muted);
+    font-size:14.5px;
+    line-height:1.65;
+    max-width:680px;
+    margin:0;
+  }
+  .sub b{color:var(--text);font-weight:500;}
+  .methodology{
+    margin-top:20px;
+    display:flex;gap:24px;flex-wrap:wrap;
+  }
+  .methodology .item{font-size:12px;color:var(--faint);max-width:230px;line-height:1.5;}
+  .methodology .item b{display:block;color:var(--muted);font-family:'Space Grotesk',sans-serif;
+    font-size:11px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;font-weight:600;}
+
+  .legend{
+    display:flex;flex-direction:column;gap:8px;margin-top:18px;
+  }
+  .legend .lg-row{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:11.5px;color:var(--muted);}
+  .legend .lg-label{color:var(--faint);width:112px;font-family:'Space Grotesk',sans-serif;font-size:10.5px;
+    text-transform:uppercase;letter-spacing:0.06em;}
+  .legend .lg-item{display:flex;align-items:center;gap:7px;}
+  .legend .sw{width:10px;height:10px;border-radius:3px;}
+  .sw.green{background:var(--green);}
+  .sw.yellow{background:var(--yellow);}
+  .sw.red{background:var(--red);}
+  .sw.purple{background:var(--purple);}
+
+  .controls{
+    display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .search{
+    flex:1;min-width:220px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:11px 14px;
+    color:var(--text);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    outline:none;
+  }
+  .search::placeholder{color:var(--faint);}
+  .search:focus{border-color:var(--green);}
+
+  .pills{display:flex;gap:6px;}
+  .pill{
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--muted);
+    padding:10px 16px;
+    border-radius:8px;
+    font-size:12px;
+    letter-spacing:0.04em;
+    cursor:pointer;
+    font-family:'IBM Plex Mono',monospace;
+    transition:all .12s ease;
+  }
+  .pill:hover{border-color:var(--faint);color:var(--text);}
+  .pill.active{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+
+  .sortbar{
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+    font-size:11.5px;color:var(--faint);
+    margin-bottom:14px;
+  }
+  #sortButtons{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .sortbtn{
+    background:transparent;border:1px solid var(--line);color:var(--muted);
+    padding:7px 12px;border-radius:6px;cursor:pointer;font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;transition:all .12s ease;
+  }
+  .sortbtn.active{border-color:var(--amber);color:var(--amber);background:var(--amber-dim);}
+
+  .count{color:var(--faint);font-size:11.5px;margin-left:auto;}
+
+  .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;min-width:900px;}
+  thead th{
+    text-align:left;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--faint);
+    padding:0 10px 10px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+    user-select:none;
+    white-space:nowrap;
+  }
+  thead th:hover{color:var(--muted);}
+  thead th.sorted{color:var(--green);}
+  tbody tr{border-bottom:1px solid var(--line);}
+  tbody tr:hover{background:var(--surface);}
+  tbody td{padding:11px 10px;font-size:13px;vertical-align:middle;}
+
+  td.rank{color:var(--faint);font-size:12px;width:32px;}
+  td.name{font-weight:500;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13.5px;}
+  td.name .team{color:var(--faint);font-size:11px;margin-left:8px;font-family:'IBM Plex Mono',monospace;}
+
+  .pos-tag{
+    display:inline-block;padding:2px 7px;border-radius:4px;
+    font-size:10.5px;font-weight:600;letter-spacing:0.03em;
+  }
+  .pos-WR{background:rgba(90,166,255,0.14);color:var(--wr);}
+  .pos-RB{background:rgba(47,221,139,0.14);color:var(--rb);}
+  .pos-TE{background:rgba(199,146,234,0.14);color:var(--te);}
+
+  .bar-cell{min-width:170px;}
+  .bar-row{display:flex;align-items:center;gap:9px;}
+  .bar-track{
+    flex:1;height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;
+    max-width:100px;
+  }
+  .bar-fill{height:100%;border-radius:3px;background:var(--green);}
+  .bar-fill.amber{background:var(--amber);}
+  .bar-fill.yellow{background:var(--yellow);}
+  .bar-fill.red{background:var(--red);}
+  .bar-fill.purple{background:var(--purple);}
+  .bar-num{font-size:13px;color:var(--text);width:40px;text-align:right;font-variant-numeric:tabular-nums;}
+  .bar-pct{font-size:11px;color:var(--faint);width:44px;text-align:right;font-variant-numeric:tabular-nums;}
+
+  .muted-cell{color:var(--faint);font-size:12.5px;font-variant-numeric:tabular-nums;text-align:right;}
+
+  footer{
+    margin-top:36px;padding-top:20px;border-top:1px solid var(--line);
+    color:var(--faint);font-size:11.5px;line-height:1.7;
+  }
+
+  @media (max-width:720px){
+    .methodology{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow"><span class="dot"></span>2026 SEASON &nbsp;·&nbsp; FLEX OPPORTUNITY MODEL</div>
+    <h1 class="display">Vacancy <span>Board</span></h1>
+    <p class="sub">Every <b>WR / RB / TE</b> on a current 2026 roster, ranked by how many targets walked out the door
+      on their team this offseason — and, within that, by how heavily they were actually used
+      on their own team last year.</p>
+    <div class="methodology">
+      <div class="item"><b>Vacated targets</b>Sum of 2025 targets belonging to every player no longer on that team in 2026.</div>
+      <div class="item"><b>Vacated carries</b>Same idea, for carries. Shown for RBs only.</div>
+      <div class="item"><b>Usage rate</b>Own 2025 (carries + targets) ÷ team's offensive plays in only the weeks the player was actually active on that team — trades and injuries prorate correctly.</div>
+      <div class="item"><b>On-field %</b>Own 2025 offensive snaps ÷ team's offensive plays in only the weeks the player was actually active.</div>
+      <div class="item"><b>GS</b>Games started, 2025 season.</div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </header>
+
+  <div class="controls">
+    <input class="search" id="search" type="text" placeholder="Search player, team, city, or abbreviation (e.g. Commanders, Washington, WAS)…">
+    <div class="pills" id="posPills">
+      <div class="pill active" data-pos="ALL">FLEX</div>
+      <div class="pill" data-pos="PC">Pass Catchers</div>
+      <div class="pill" data-pos="RB">RB</div>
+      <div class="pill" data-pos="WR">WR</div>
+      <div class="pill" data-pos="TE">TE</div>
+    </div>
+  </div>
+
+  <div class="sortbar">
+    <span>SORT&nbsp;BY</span>
+    <span id="sortButtons"></span>
+    <span class="count" id="rowCount"></span>
+  </div>
+
+  <div id="loadingMsg" style="color:var(--faint);font-size:13px;padding:20px 0;">Loading current data…</div>
+  <div class="table-scroll" id="tableScroll" style="display:none;">
+  <table>
+    <thead id="thead"></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  </div>
+
+  <footer>
+    "Left the team" is determined by comparing each player's most recent 2025 team to their current 2026 roster team;
+    players who exited the league entirely (retired / unsigned) still count as fully vacated. Bar colors are set from
+    the actual 2026 distribution across all 32 teams, separately for vacated targets and vacated carries: red is
+    more than one standard deviation below the league average, yellow is within one standard deviation, green is
+    one to two standard deviations above average, and purple is more than two standard deviations above average.
+    Usage rate and on-field % are computed week-by-week: for each week a player recorded offensive snaps, his touches and snaps that week are divided by his actual team's plays that week, then summed across only those active weeks — so a midseason trade or an injury-shortened season is measured against the real games played, not a full 17-game total. Games started and snap counts come from PFR/nflverse charting and may be incomplete for a handful of players.
+    Built from free, open nflverse data.
+  </footer>
+
+</div>
+
+<script>
+let DATA = [], VAC_STATS = {targets:{},carries:{}}, TEAM_INFO = {};
+
+// column definitions, keyed by id
+const COLS = {
+  rank:   { label:'#', render:(d,i)=>`<td class="rank">${i+1}</td>` },
+  player: { label:'Player', render:d=>`<td class="name">${d.name}<span class="team">${d.team}</span></td>` },
+  pos:    { label:'Pos', render:d=>`<td><span class="pos-tag pos-${d.pos}">${d.pos}</span></td>` },
+  vacTgt: { label:'Vacated Tgts (team)', sort:'vac', bar:true,
+            render:d=>barCell(d.vac, d.vacColor, maxOf('vac')) },
+  vacCar: { label:'Vacated Car (team)', sort:'vacCar', bar:true,
+            render:d=> d.vacCar===null ? `<td class="bar-cell"><span class="muted-cell" style="display:block;">—</span></td>`
+                                        : barCell(d.vacCar, d.vacCarColor, maxOf('vacCar')) },
+  usage:  { label:'2025 Usage Rate', sort:'usage', bar:true,
+            render:d=>pctBarCell(d.usage, maxOf('usage'), 'amber') },
+  gs:     { label:'GS', sort:'gs', align:'right', render:d=>`<td class="muted-cell">${fmtNum(d.gs)}</td>` },
+  onField:{ label:'On-Field %', sort:'onField', bar:true,
+            render:d=>pctBarCell(d.onField, maxOf('onField'), null, 'var(--wr)') },
+  posRk:  { label:'2025 POS RK', sort:'posRk', align:'center',
+            render:d=>{
+              let val, prefix;
+              if(state.pos==='ALL'){ val=d.flexRank; prefix='FLEX'; }
+              else if(state.pos==='PC'){ val=d.pcRank; prefix='PC'; }
+              else { val=d.posRank; prefix=d.pos; }
+              return `<td class="muted-cell" style="text-align:center;">${val===null||val===undefined ? '—' : prefix+val}</td>`;
+            } },
+  oc:     { label:'OC', sort:'oc', align:'center',
+            render:d=>`<td style="text-align:center;"><span class="pos-tag" style="background:${d.oc==='NEW'?'var(--amber-dim)':'var(--surface-2)'};color:${d.oc==='NEW'?'var(--amber)':'var(--muted)'};">${d.oc||'—'}</span></td>` },
+  tgt2025:{ label:'2025 Tgt', sort:'tgt2025', align:'right', render:d=>`<td class="muted-cell">${d.tgt2025}</td>` },
+  car2025:{ label:'2025 Car', sort:'car2025', align:'right', render:d=>`<td class="muted-cell">${d.car2025}</td>` },
+  aav:    { label:'AAV', sort:'aav', align:'right', render:d=>`<td class="muted-cell">${fmtMoney(d.aav)}</td>` },
+};
+
+// default (base) layouts per tab, BEFORE inserting the OC column
+const BASE_LAYOUTS = {
+  ALL: ['rank','player','pos','vacTgt','usage','gs','onField','vacCar','tgt2025','car2025'],
+  PC:  ['rank','player','pos','vacTgt','usage','gs','onField','tgt2025','car2025'],
+  WR:  ['rank','player','pos','vacTgt','usage','gs','onField','tgt2025','car2025'],
+  TE:  ['rank','player','pos','vacTgt','usage','gs','onField','tgt2025','car2025'],
+  RB:  ['rank','player','pos','vacCar','usage','gs','onField','vacTgt','car2025','tgt2025'],
+};
+
+// insert 'oc' third-from-the-right (i.e. right before the final two columns) for every tab
+const LAYOUTS = {};
+for (const key in BASE_LAYOUTS) {
+  const base = BASE_LAYOUTS[key].slice();
+  base.splice(base.length - 2, 0, 'oc');
+  LAYOUTS[key] = base;
+}
+// RB gets a custom explicit order (not the generic "OC third-from-right" rule)
+LAYOUTS.RB = ['rank','player','pos','vacCar','usage','onField','gs','oc','vacTgt','car2025','tgt2025'];
+
+// insert 'posRk' directly to the left of 'oc' in every tab's layout
+for (const key in LAYOUTS) {
+  const idx = LAYOUTS[key].indexOf('oc');
+  if (idx !== -1) LAYOUTS[key].splice(idx, 0, 'posRk');
+}
+// AAV goes all the way to the right of every default layout
+for (const key in LAYOUTS) {
+  LAYOUTS[key].push('aav');
+}
+
+// map a sort key to the column id that owns it (they differ for vacTgt -> 'vac')
+const SORT_TO_COL = {};
+for (const colId in COLS) {
+  if (COLS[colId].sort) SORT_TO_COL[COLS[colId].sort] = colId;
+}
+
+let state = { pos:'ALL', sort:'vac', query:'' };
+
+function fmtPct(u){
+  if(u===null || u===undefined) return '—';
+  return (u*100).toFixed(1)+'%';
+}
+function fmtNum(n){
+  return (n===null||n===undefined) ? '—' : n;
+}
+function fmtMoney(n){
+  if(n===null||n===undefined) return '—';
+  const millions = n/1000000;
+  // trim to at most 2 decimals, drop trailing zeros (e.g. 40.25, 12, 7.5)
+  const rounded = Math.round(millions*100)/100;
+  return '$' + rounded.toString() + 'M';
+}
+
+let _maxCache = {};
+function maxOf(key){
+  if(_maxCache[key]!==undefined) return _maxCache[key];
+  const vals = DATA.filter(d=>d[key]!==null && d[key]!==undefined).map(d=>d[key]);
+  const m = vals.length ? Math.max(...vals) : 1;
+  _maxCache[key] = m;
+  return m;
+}
+
+function barCell(val, colorClass, max){
+  const pct = Math.max(4, (val/max)*100);
+  return `<td class="bar-cell"><div class="bar-row">
+    <span class="bar-num">${val}</span>
+    <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${pct}%"></div></div>
+  </div></td>`;
+}
+function pctBarCell(val, max, colorClass, colorVar){
+  if(val===null||val===undefined){
+    return `<td class="bar-cell"><div class="bar-row"><span class="bar-pct">—</span>
+      <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div></td>`;
+  }
+  const pct = Math.max(4, (val/max)*100);
+  const style = colorVar ? `width:${pct}%;background:${colorVar};` : `width:${pct}%;`;
+  const cls = colorClass ? `bar-fill ${colorClass}` : 'bar-fill';
+  return `<td class="bar-cell"><div class="bar-row">
+    <span class="bar-pct">${fmtPct(val)}</span>
+    <div class="bar-track"><div class="${cls}" style="${style}"></div></div>
+  </div></td>`;
+}
+
+function renderLegend(){
+  const t = VAC_STATS.targets, c = VAC_STATS.carries;
+  const row = (label, st) => `<div class="lg-row">
+    <span class="lg-label">${label}</span>
+    <div class="lg-item"><span class="sw red"></span>&lt; ${Math.round(st.lo)}</div>
+    <div class="lg-item"><span class="sw yellow"></span>${Math.round(st.lo)}–${Math.round(st.hi)} (avg ${Math.round(st.mean)})</div>
+    <div class="lg-item"><span class="sw green"></span>${Math.round(st.hi)}–${Math.round(st.hi2)}</div>
+    <div class="lg-item"><span class="sw purple"></span>&gt; ${Math.round(st.hi2)}</div>
+  </div>`;
+  document.getElementById('legend').innerHTML = row('Vacated Tgts', t) + row('Vacated Car', c);
+}
+
+// Compute the columns to actually display, given the current tab + current sort.
+// Rank/Player/Pos always stay first; the sorted column (if present in this tab's
+// layout) moves to slot 4; everything else keeps its original relative order.
+function getDisplayLayout(){
+  const base = LAYOUTS[state.pos];
+  const sortColId = SORT_TO_COL[state.sort];
+  if(!sortColId || !base.includes(sortColId)) return base;
+  const rest = base.filter(k => k!=='rank' && k!=='player' && k!=='pos' && k!==sortColId);
+  return ['rank','player','pos', sortColId, ...rest];
+}
+
+function renderHead(){
+  const layout = getDisplayLayout();
+  const thead = document.getElementById('thead');
+  thead.innerHTML = '<tr>' + layout.map(key=>{
+    const col = COLS[key];
+    const sortAttr = col.sort ? ` data-sort="${col.sort}"` : '';
+    const sortedClass = col.sort===state.sort ? ' sorted' : '';
+    let style = '';
+    if(key==='rank') style = ' style="width:32px;"';
+    else if(key==='pos') style = ' style="width:46px;"';
+    else if(col.align==='right') style = ' style="text-align:right;"';
+    else if(col.align==='center') style = ' style="text-align:center;"';
+    return `<th${sortAttr} class="${sortedClass.trim()}"${style}>${col.label}</th>`;
+  }).join('') + '</tr>';
+
+  thead.querySelectorAll('th[data-sort]').forEach(th=>{
+    th.addEventListener('click', ()=>setSort(th.dataset.sort));
+  });
+}
+
+function renderSortBar(){
+  const base = LAYOUTS[state.pos]; // default column order for this tab
+  const seen = new Set();
+  const buttons = [];
+  base.forEach(key=>{
+    const col = COLS[key];
+    if(col.sort && !seen.has(col.sort)){
+      seen.add(col.sort);
+      buttons.push({ sortKey: col.sort, label: col.label });
+    }
+  });
+  const container = document.getElementById('sortButtons');
+  container.innerHTML = buttons.map(b=>
+    `<button class="sortbtn${b.sortKey===state.sort ? ' active' : ''}" data-sort="${b.sortKey}">${b.label}</button>`
+  ).join('');
+  container.querySelectorAll('.sortbtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>setSort(btn.dataset.sort));
+  });
+}
+
+function render(){
+  renderHead();
+  renderSortBar();
+  const layout = getDisplayLayout();
+
+  let rows = DATA.filter(d=>{
+    if(state.pos==='PC' && d.pos!=='WR' && d.pos!=='TE') return false;
+    if(state.pos!=='ALL' && state.pos!=='PC' && d.pos!==state.pos) return false;
+    if(state.query){
+      const q = state.query.toLowerCase();
+      const info = TEAM_INFO[d.team] || {};
+      const haystacks = [d.name, d.team, info.full, info.city, info.nick].filter(Boolean).map(s=>s.toLowerCase());
+      if(!haystacks.some(h=>h.includes(q))) return false;
+    }
+    return true;
+  });
+
+  const rankVal = (d, key)=>{
+    if(key==='vac') return d.vac;
+    if(key==='usage') return d.usage===null?-1:d.usage;
+    if(key==='vacCar') return d.vacCar===null?-1:d.vacCar;
+    if(key==='onField') return d.onField===null?-1:d.onField;
+    if(key==='gs') return d.gs===null?-1:d.gs;
+    if(key==='tgt2025') return d.tgt2025===null?-1:d.tgt2025;
+    if(key==='car2025') return d.car2025===null?-1:d.car2025;
+    if(key==='oc') return d.oc==='NEW' ? 1 : 0;
+    if(key==='posRk'){
+      const val = state.pos==='ALL' ? d.flexRank : state.pos==='PC' ? d.pcRank : d.posRank;
+      return (val===null||val===undefined) ? -1000000 : -val;
+    }
+    if(key==='aav') return d.aav===null||d.aav===undefined ? -1 : d.aav;
+    return 0;
+  };
+
+  rows.sort((a,b)=>{
+    const primary = rankVal(b,state.sort) - rankVal(a,state.sort);
+    if(primary!==0) return primary;
+    return b.vac - a.vac;
+  });
+
+  document.getElementById('rowCount').textContent = rows.length + ' players';
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = rows.map((d,i)=>{
+    return '<tr>' + layout.map(key=>{
+      return key==='rank' ? COLS.rank.render(d,i) : COLS[key].render(d);
+    }).join('') + '</tr>';
+  }).join('');
+}
+
+// default sort to apply whenever a tab is selected
+const DEFAULT_SORT_BY_TAB = { ALL:'vac', PC:'vac', WR:'vac', TE:'vac', RB:'vacCar' };
+
+document.getElementById('posPills').addEventListener('click', e=>{
+  const pill = e.target.closest('.pill');
+  if(!pill) return;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active');
+  state.pos = pill.dataset.pos;
+  state.sort = DEFAULT_SORT_BY_TAB[state.pos] || 'vac';
+  render();
+  const scroller = document.getElementById('tableScroll');
+  if(scroller) scroller.scrollLeft = 0;
+});
+
+function setSort(key){
+  state.sort = key;
+  render();
+  const scroller = document.getElementById('tableScroll');
+  if(scroller) scroller.scrollLeft = 0;
+}
+
+document.getElementById('search').addEventListener('input', e=>{
+  state.query = e.target.value;
+  render();
+});
+
+async function boot(){
+  try{
+    const res = await fetch('./data.json', {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    DATA = json.players;
+    VAC_STATS = json.vacStats;
+    TEAM_INFO = json.teamInfo;
+    document.getElementById('loadingMsg').style.display = 'none';
+    document.getElementById('tableScroll').style.display = '';
+    renderLegend();
+    render();
+  } catch(err){
+    document.getElementById('loadingMsg').textContent =
+      'Could not load data.json (' + err.message + '). Make sure data.json is in the same folder as this page.';
+  }
+}
+boot();
+</script>
+</body>
+</html>
